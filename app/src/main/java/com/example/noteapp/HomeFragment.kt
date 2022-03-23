@@ -1,24 +1,20 @@
 package com.example.noteapp
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.noteapp.adapter.NotesAdapter
 import com.example.noteapp.database.NoteDatabase
 import com.example.noteapp.databinding.FragmentHomeBinding
-import com.example.noteapp.entities.Notes
 import kotlinx.coroutines.launch
 
-class HomeFragment :Basefragment() {
+class HomeFragment : Basefragment() {
 
-    private lateinit var fragBinding:FragmentHomeBinding
-    private var adapter : NotesAdapter = NotesAdapter()
+    private lateinit var fragBinding: FragmentHomeBinding
+    private var adapter: NotesAdapter = NotesAdapter()
 
 
     override fun onCreateView(
@@ -30,7 +26,8 @@ class HomeFragment :Basefragment() {
         fragBinding = FragmentHomeBinding.inflate(layoutInflater)
 
 
-        fragBinding.noteRecyclerView.layoutManager = StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL)
+        fragBinding.noteRecyclerView.layoutManager =
+            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
 
         launch {
             context?.let {
@@ -40,11 +37,7 @@ class HomeFragment :Basefragment() {
             }
         }
 
-
-
-
         fragBinding.createNoteBtn.setOnClickListener {
-//            findNavController().navigate(action)
             val action = HomeFragmentDirections.actionHomeFragmentToCreateNoteFragment(0)
             findNavController().navigate(action)
         }
@@ -58,14 +51,12 @@ class HomeFragment :Basefragment() {
     }
 
 
-    private val onCLicked = object :NotesAdapter.OnItemClickListener{
+    private val onCLicked = object : NotesAdapter.OnItemClickListener {
         override fun onClicked(notesId: Int) {
-            //findNavController().navigate(R.id.action_homeFragment_to_createNoteFragment)
             val action = HomeFragmentDirections.actionHomeFragmentToCreateNoteFragment(notesId)
             findNavController().navigate(action)
         }
     }
-
 
 
 }

@@ -5,7 +5,6 @@ import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
-import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -32,7 +31,7 @@ class CreateNoteFragment : Basefragment(), View.OnClickListener {
     private lateinit var currentDate: String
     private var selectedImagePath = ""
     private var noteId = 0
-    private val args : CreateNoteFragmentArgs by navArgs()
+    private val args: CreateNoteFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,26 +70,25 @@ class CreateNoteFragment : Basefragment(), View.OnClickListener {
         colorChar = "DEFAULT"
 
 
-        if (noteId != 0){
+        if (noteId != 0) {
             launch {
-            context?.let {
-                val notes = NoteDatabase.getDatabase(it).noteDao().getSpecificNote(noteId)
-                fragBind.noteTagColor.setBackgroundColor(resources.getColor(R.color.ColorOrangeNote))
-                fragBind.noteTitle.setText(notes.title)
-                fragBind.noteSubTitle.setText(notes.subTitle)
-                fragBind.noteDescription.setText(notes.noteText)
+                context?.let {
+                    val notes = NoteDatabase.getDatabase(it).noteDao().getSpecificNote(noteId)
+                    fragBind.noteTagColor.setBackgroundColor(resources.getColor(R.color.ColorOrangeNote))
+                    fragBind.noteTitle.setText(notes.title)
+                    fragBind.noteSubTitle.setText(notes.subTitle)
+                    fragBind.noteDescription.setText(notes.noteText)
 
-                if (notes.imgPath != ""){
-                    selectedImagePath = notes.imgPath!!
-                    fragBind.noteImage.setImageBitmap(BitmapFactory.decodeFile(notes.imgPath))
-                    fragBind.noteImage.visibility = View.VISIBLE
-                }else{
-                    fragBind.noteImage.visibility = View.GONE
+                    if (notes.imgPath != "") {
+                        selectedImagePath = notes.imgPath!!
+                        fragBind.noteImage.setImageBitmap(BitmapFactory.decodeFile(notes.imgPath))
+                        fragBind.noteImage.visibility = View.VISIBLE
+                    } else {
+                        fragBind.noteImage.visibility = View.GONE
                     }
                 }
             }
-        }
-        else if(noteId == 0) {
+        } else if (noteId == 0) {
             launch {
                 context?.let {
                     fragBind.noteTagColor.setBackgroundColor(resources.getColor(R.color.ColorOrangeNote))
@@ -110,10 +108,6 @@ class CreateNoteFragment : Basefragment(), View.OnClickListener {
         fragBind.backBtn.setOnClickListener {
             findNavController().navigate(R.id.action_createNoteFragment_to_homeFragment)
         }
-    }
-
-    private fun updateNote(){
-
     }
 
     private fun saveNote() {
@@ -247,12 +241,12 @@ class CreateNoteFragment : Basefragment(), View.OnClickListener {
     }
 
 
-    private fun getPathFromUri(contentUri:Uri):String?{
-        var filePath:String? = null
-        val cursor = requireActivity().contentResolver.query(contentUri,null,null,null,null)
-        if (cursor == null){
+    private fun getPathFromUri(contentUri: Uri): String? {
+        var filePath: String? = null
+        val cursor = requireActivity().contentResolver.query(contentUri, null, null, null, null)
+        if (cursor == null) {
             filePath = contentUri.path
-        }else{
+        } else {
             cursor.moveToFirst()
             var index = cursor.getColumnIndex("_data")
             filePath = cursor.getString(index)
@@ -269,11 +263,12 @@ class CreateNoteFragment : Basefragment(), View.OnClickListener {
                 val selectedImage = data.data
                 if (selectedImage != null) {
                     try {
-                        val inputStream = requireActivity().contentResolver.openInputStream(selectedImage)
+                        val inputStream =
+                            requireActivity().contentResolver.openInputStream(selectedImage)
                         val bitmap = BitmapFactory.decodeStream(inputStream)
                         fragBind.noteImage.setImageBitmap(bitmap)
                         fragBind.noteImage.visibility = View.VISIBLE
-                        selectedImagePath  = getPathFromUri(selectedImage)!!
+                        selectedImagePath = getPathFromUri(selectedImage)!!
 
                     } catch (e: Exception) {
                         Toast.makeText(requireActivity(), "${e.message}", Toast.LENGTH_SHORT).show()
